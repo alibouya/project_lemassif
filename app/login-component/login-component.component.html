@@ -1,0 +1,23 @@
+<mat-toolbar>
+  <span>Login</span>
+</mat-toolbar>
+<mat-card class="my-card">
+  <mat-card-content>
+    <form class="my-form">
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input  matInput  placeholder="Email" [(ngModel)]="email" name="email">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Password</mat-label>
+        <input  matInput  placeholder="Password" [(ngModel)]="password" name="password">
+      </mat-form-field>
+    </form>
+    <div *ngIf="failedLogin" class="errorMessage">
+      {{ failedLoginMessage }}
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="login()" color="primary">Login</button>
+  </mat-card-actions>
+</mat-card>

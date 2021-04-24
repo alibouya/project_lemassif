@@ -1,0 +1,5 @@
+<p>User Profile</p>
+<div *ngIf="isOwnPage">This is your own profile</div>
+<div>User: {{userViewing?.email}}</div>
+<button *ngIf="isOwnPage || user.type == 'admin'">Delete</button>
+<button mat-raised-button (click)="Logout()" color="primary">Logout</button>

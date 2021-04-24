@@ -1,0 +1,30 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "vente en ligne des meubles",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server \" \"npm run client \""
+    
+  },
+  "author": "Ameur Sassi",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.2.4",
+    "express": "^4.17.1",
+    "express-validator": "^6.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.4",
+    "nodemon": "^2.0.7",
+    "swagger-jsdoc": "^7.0.0-rc.6",
+    "swagger-ui-express": "^4.1.6",
+    "touch-for-windows": "^1.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2",
+    "ng-swagger-gen": "^2.3.1"
+  }
+}

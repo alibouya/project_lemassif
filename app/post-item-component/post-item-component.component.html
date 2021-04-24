@@ -1,0 +1,14 @@
+<mat-card class="my-card" *ngIf="!hidden">
+    <mat-card-content>
+        <div>
+            {{ post.message }}
+        </div>
+        <div>
+            Posted {{ postDate }}
+        </div>
+        <div>
+            Posted by <a routerLink="/viewUser" [queryParams]='{username:post.username}'>{{ post.username }}</a>
+        </div>
+    </mat-card-content>
+    <button *ngIf="hasAccess" (click)="delete()">Delete</button>
+</mat-card>

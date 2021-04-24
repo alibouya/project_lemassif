@@ -1,0 +1,59 @@
+<mat-toolbar>
+  <span>Registration</span>
+</mat-toolbar>
+<mat-card class="my-card">
+  <mat-card-content>
+    <div>
+      <app-image-cropper #modal (croppedURLEmitter)="imageSelected($event)"></app-image-cropper>
+      <div>
+        <button (click)="modal.show()">Crop Image</button>
+        <br>
+        <img class="img-preview" *ngIf="imgURL" [src]="imgURL">
+      </div>
+    </div>
+    <form class="my-form">
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input  matInput  placeholder="Email" [(ngModel)]="email" name="email" required>
+      </mat-form-field>
+      <div *ngIf="error.email" class="errorMessage">
+        {{ error.email }}
+      </div>
+      <mat-form-field class="full-width">
+        <mat-label>Username</mat-label>
+        <input  matInput  placeholder="Username" [(ngModel)]="username" name="username"  required>
+      </mat-form-field>
+      <div *ngIf="error.username" class="errorMessage">
+        {{ error.username }}
+      </div>
+      <mat-form-field class="full-width">
+        <mat-label>Password</mat-label>
+        <input  matInput  placeholder="Password" [(ngModel)]="password" name="password" required>
+      </mat-form-field>
+      <div *ngIf="error.password" class="errorMessage">
+        {{ error.password }}
+      </div>
+      <mat-form-field class="full-width">
+        <mat-label>Repeat Password</mat-label>
+        <input  matInput  placeholder="Repeat Password" [(ngModel)]="password2" name="password2" required>
+      </mat-form-field>
+      <div *ngIf="error.password2" class="errorMessage">
+        {{ error.password2 }}
+      </div>
+      <mat-form-field>
+        <mat-label>Select User Status</mat-label>
+        <mat-select matInput [(ngModel)]="type" name="type">
+          <mat-option *ngFor="let t of types" [value]="t.value">
+            {{ t.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="error.type" class="errorMessage">
+        {{ error.type }}
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="register()" color="primary">Register</button>
+  </mat-card-actions>
+</mat-card>

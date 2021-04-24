@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://ameurs:06205670@cluster0-9mtuq.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "A.Sassi-AirCoder"
+}
