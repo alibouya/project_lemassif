@@ -1,0 +1,32 @@
+.container {
+    margin-top: 30px;
+  }
+  
+  .row {
+    margin: 20px 0;
+  }
+  .my-form{
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .errorMessage {
+    color: red;
+  }
+  
+  .img-container{
+    width: 640px;
+    height: 480px;
+    max-height: 1000px;
+  }
+  
+  .img-preview{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }

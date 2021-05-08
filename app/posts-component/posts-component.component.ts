@@ -3,7 +3,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { PostsService } from '../posts/posts.service';
 import {Credentials, UserDetails} from '../authentication/model/credentials';
 import { Post } from '../posts/models/post';
- 
+
 @Component({
   selector: 'app-posts-component',
   templateUrl: './posts-component.component.html',
@@ -22,7 +22,7 @@ export class PostsComponentComponent implements OnInit {
 
   ngOnInit() {
     const user = this.authService.getUser();
-    if ((user as UserDetails).username) {
+    if ((user as UserDetails).name) {
       this.user = user as UserDetails;
     } else {
       (user as Promise<UserDetails>).then(userDetails => {
@@ -39,7 +39,7 @@ export class PostsComponentComponent implements OnInit {
   post(){
     if(this.postText){
       this.postsService.post(this.postText);
-      this.posts.unshift({created: "Just Now", message: this.postText, username: this.user.username}) // Adds post immediately to posts page
+      this.posts.unshift({created: "Just Now", message: this.postText, username: this.user.name}) // Adds post immediately to posts page
       this.postText = "";
     }
   }
@@ -48,4 +48,9 @@ export class PostsComponentComponent implements OnInit {
     this.postsService.deletePostById(post.id);
     this.posts = this.posts.filter( p => p.id != post.id);
   }
+
+  Logout(){
+    this.authService.logout()
+  }
 }
+

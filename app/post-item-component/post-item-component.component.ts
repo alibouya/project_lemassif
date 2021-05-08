@@ -25,7 +25,7 @@ export class PostItemComponentComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.AuthService.getUserSubject().getValue();
-    this.hasAccess = this.user.username == this.post.username || this.user.type == "admin";
+    this.hasAccess = this.user.name == this.post.username || this.user.role == "admin";
     this.postDate = this.getDate(this.post.created);
   }
 

@@ -9,7 +9,8 @@ const User = require("../Models/user");
 // @route    GET users/
 // @desc     get users
 // @access   Private
-router.get("/", [authentification, admin], async (req, res) => {
+//[authentification, admin],
+router.get("/", async (req, res) => {
   try {
     const users = req.query.role
       ? await User.find({ role: req.query.role })
@@ -26,7 +27,8 @@ router.get("/", [authentification, admin], async (req, res) => {
 // @route    DELETE users/:id
 // @desc     delete a  user
 // @access   Private
-router.delete("/:id", [authentification, admin], async (req, res) => {
+// [authentification, admin],
+router.delete("/:id",  async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user)

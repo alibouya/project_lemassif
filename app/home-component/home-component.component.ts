@@ -15,7 +15,7 @@ export class HomeComponentComponent implements OnInit {
 
   ngOnInit() {
     const user = this.authenticationService.getUser();
-    if ((user as UserDetails).username) {
+    if ((user as UserDetails).name) {
       this.user = user as UserDetails;
     } else {
       (user as Promise<UserDetails>).then(userDetails => {

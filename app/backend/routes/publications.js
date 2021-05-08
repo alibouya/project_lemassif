@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
 router.get("/recent", async (req, res) => {
   try {
     const publications = await Publication.find()
-      .limit(4)
+      // .limit(7)
       .sort({ date: -1 });
 
     if (!publications)
@@ -79,11 +79,12 @@ router.get("/:id", async (req, res) => {
 // @route    POST annonces/
 // @desc     add an ad
 // @access   Private
+// authentification,
+// admin,
 router.post(
   "/",
   [
-    authentification,
-    admin,
+ 
     check("title", "please enter your pub title")
       .not()
       .isEmpty(),
@@ -109,7 +110,7 @@ router.post(
       }
       const { title, description, image, marque } = req.body;
       const publication = new Publication({
-        user: req.user._id,
+        //user: req.user._id,
         title,
         marque,
         description,
@@ -183,18 +184,21 @@ router.put(
 // @route    DELETE annonces/:id
 // @desc     delete an ad
 // @access   Private
-router.delete("/:id", authentification, async (req, res) => {
+// authentification,
+router.delete("/:id",  async (req, res) => {
+  
+    // console.log(mongoose.Types.ObjectId.isValid(publication))
   try {
     let publication = await Publication.findById(req.params.id);
     if (!publication)
       return res
         .status(404)
         .send({ msg: "The ad with the given ID was not found." });
-    if (
-      publication.user.toString() !== req.user._id &&
-      req.user.role !== "Admin"
-    )
-      return res.status(403).send({ msg: "unauthentification" });
+    // if (
+    //   publication.user.toString() !== req.user._id &&
+    //   req.user.role !== "Admin"
+    // )
+      // return res.status(403).send({ msg: "unauthentification" });
     publication = await Publication.findByIdAndDelete(req.params.id);
     res.send("ad removed");
   } catch (error) {

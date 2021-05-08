@@ -1,0 +1,139 @@
+<h1 class="text-center">Welcome admin</h1>
+<button mat-raised-button (click)="onFetchPosts()" color="primary">Liste des messages</button>
+<button mat-raised-button (click)="recentpublication()" color="primary">Liste des publications</button>
+
+<button mat-raised-button (click)="onFetchUsers()" color="primary">Liste des utilisateurs</button>
+<button mat-raised-button (click)="savepub()" color="primary">Créer une nouvelle publications</button>
+<button mat-raised-button class="btn btn-warning float-right" (click)="Logout()" color="primary">Logout</button>
+
+
+<div class="row">
+  <!-- <div class="col-xs-12 col-md-6 col-md-offset-3"> -->
+
+  <p *ngIf="loadedPosts.length < 1 && !isFetching ">No posts available!</p>
+  <ul class="list-group" *ngIf="loadedPosts.length >= 1 && !isFetching">
+    <li class="list-group-item" *ngFor="let post of loadedPosts">
+      <div class="container">
+        <h3>{{ post.name }}</h3>
+        <p>{{ post.text }}</p>
+        <p>{{ post.date }}</p>
+        <button type="button" class="btn btn-danger" (click)="deletemessage(post)">Delete message</button>
+
+      </div>
+      <hr>
+
+    </li>
+  </ul>
+  <!-- <p *ngIf="isFetching">Loading...</p> -->
+
+
+  <p class="row" *ngIf="loadedUsers.length < 1 && !isFetchingUsers  ">No Users available!</p>
+  <ul class="list-group" *ngIf="loadedUsers.length >= 1 && !isFetchingUsers">
+    <li class="list-group-item" *ngFor="let user of loadedUsers">
+      <div class="container">
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.email }}</p>
+        <p>{{ user.phone }}</p>
+        <button type="button" class="btn btn-danger" (click)="deleteuser(user)">Delete user</button>
+
+      </div>
+      <hr>
+
+    </li>
+  </ul>
+
+
+  <!-- <mat-toolbar >
+      </mat-toolbar> -->
+
+  <mat-card class="my-card" *ngIf="showing">
+    <mat-card-content>
+      <span>
+        <p> Nouvelle Publication</p>
+      </span>
+
+      <form class="my-form" #pubform="ngForm" (ngSubmit)="createnewpublication(pubform)">
+        <mat-form-field class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput type="title" id="title" required placeholder="title" class="form-control" ngModel
+            [(ngModel)]="title" name="title">
+        </mat-form-field>
+        <hr>
+
+        <mat-form-field class="full-width">
+          <mat-label>Description</mat-label>
+          <input matInput class="form-control" type="description" id="description" required placeholder="description"
+            ngModel [(ngModel)]="description" name="description">
+          <img mat-card-image>
+
+        </mat-form-field>
+        <hr>
+
+        <mat-label>image</mat-label>
+        <hr>
+
+        <!-- <input matInput class="form-control" type="image" id="image" required placeholder="image" ngModel
+            [(ngModel)]="image" name="image"> -->
+        <input #file [src]="imgURL1" type="image" id="image" required placeholder="image" ngModel [(ngModel)]="imgURL1"
+          name="image" type="file" accept="image/*" (change)="readUrl($event)">
+        <!-- <img [src]="imgURL1"/> -->
+
+
+        <mat-form-field class="full-width">
+          <mat-label>Marque</mat-label>
+          <mat-select type="marque" id="marque" class="form-control" required placeholder="marque" ngModel
+            [(ngModel)]="marque" name="marque">
+            <mat-option *ngFor="let t of types" [value]="t.value">
+              {{ t.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button (click)="createnewpublication(pubform)" class="btn btn-primary">Save Publication</button>
+
+      </form>
+
+
+    </mat-card-content>
+  </mat-card>
+
+  <!-- <p *ngIf="loadedUsers.length < 1 && !isFetchingUsers  ">No Users available!</p> -->
+
+  <!-- <p *ngIf="isFetchingUsers">Loading...</p> -->
+  <!-- </div>
+</div> -->
+  <!-- </div> -->
+  <div class="row" *ngIf="loadedPubs1.length >= 1 && !isPosting1">
+
+    <p>Dernières publications</p>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let pubs of loadedPubs1">
+        <div class="container">
+
+          <p class="text-center">Catégories :{{ pubs.marque }}</p>
+
+          <img src="{{ pubs.image }}" class="d-block w-100" height="300px" alt="...">
+          <p class="text-center">Description : {{ pubs.description }}</p>
+          <p>Titre : {{ pubs.title }}</p>
+          <p>publié le :{{ pubs.date }}</p>
+
+          <!-- <p>id :{{ pubs._id }}</p> -->
+          <button mat-raised-button (click)="deletepub(pubs)" color="primary">Delete publication</button>
+
+        </div>
+        <ul class="list-group" *ngIf="!isComment">
+          <li class="list-group-item" *ngFor="let comm of pubs.Comments">
+            <div class="container">
+              <h3>{{ comm.text}}</h3>
+              <h3>Posted at: {{ comm.date}}</h3>
+
+            </div>
+
+          </li>
+        </ul>
+
+
+        <hr>
+
+      </li>
+    </ul>
+  </div>

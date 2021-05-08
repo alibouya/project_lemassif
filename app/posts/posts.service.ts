@@ -16,7 +16,7 @@ export class PostsService {
 
   async getPosts(){
     const user: UserDetails = await this.authService.getUser();
-    const username = user.username;
+    const username = user.name;
 
     return this.http.get<Post[]>(this.ROOT_URL + 'users/' + username + '/posts/all').toPromise().then(posts => {
       return posts.reverse();
@@ -29,7 +29,7 @@ export class PostsService {
 
   async deletePostById(postId){
     const user: UserDetails = await this.authService.getUser();
-    const username = user.username;
+    const username = user.name;
     this.http.delete(this.ROOT_URL + 'users/' + username + '/posts/' + postId).toPromise().then(res => {
       console.log("Successful Delete");
     }).catch( err => {

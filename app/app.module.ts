@@ -29,6 +29,8 @@ import { ChambresComponent } from './chambres/chambres.component';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { DiversComponent } from './divers/divers.component';
+import { AdminroomComponent } from './adminroom/adminroom.component';
+// import { LogginInterceptor } from './basic-auth/logininterceptor';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { DiversComponent } from './divers/divers.component';
     ChambresComponent,
     AcceuilComponent,
     AccueilComponent,
-    DiversComponent
+    DiversComponent,
+    AdminroomComponent
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,7 @@ import { DiversComponent } from './divers/divers.component';
     HttpClientModule,
   ],
   providers: [
+    // { provide: HTTP_INTERCEPTORS, useClass: LogginInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

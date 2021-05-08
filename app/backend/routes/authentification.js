@@ -3,7 +3,6 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const authentification = require("../middlewares/authentification");
 const admin = require("../middlewares/admin");
-
 const router = express.Router();
 const User = require("../Models/user");
 
@@ -84,7 +83,8 @@ router.post(
         return res.status(400).send({ msg: "Invalid email or password." });
       }
       const token = user.generateAuthToken();
-      res.json({ token });
+       res.json({ token });
+      
     } catch (error) {
       res.status(500).send("Server error");
     }
@@ -94,7 +94,8 @@ router.post(
 // @route    GET auth/current
 // @desc     get current user
 // @access   Private
-router.get("/current", authentification, async (req, res) => {
+// , authentification
+router.get("/current",async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user._id }).select("-password");
     res.json(user);

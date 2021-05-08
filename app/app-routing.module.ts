@@ -19,6 +19,8 @@ import { HeaderComponent } from './header/header.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { DiversComponent } from './divers/divers.component';
 import { Notfound404Component } from './notfound404/notfound404.component';
+import { PostItemComponentComponent } from './post-item-component/post-item-component.component';
+import { AdminroomComponent } from './adminroom/adminroom.component';
 
 const routes: Routes = [
   
@@ -69,6 +71,9 @@ const routes: Routes = [
   // , canActivate: [AuthGuardService]
   { path: 'posts', component:PostsComponentComponent },
   { path: 'viewUser', component:UserViewComponent },
+  { path: 'postsitem', component:PostItemComponentComponent },
+  { path: 'admin', component:AdminroomComponent },
+
 
   {
     path: '', redirectTo: 'home', pathMatch: 'full'

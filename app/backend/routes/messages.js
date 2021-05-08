@@ -118,17 +118,17 @@ router.post(
 // @route    DELETE annonces/:id
 // @desc     delete an ad
 // @access   Private
-router.delete("/:id", authentification, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     let message = await Message.findById(req.params.id);
-    if (!message)
+    if (!message){
       return res
         .status(404)
-        .send({ msg: "The message with the given ID was not found." });
+        .send({ msg: "The message with the given ID was not found." });}
     // if (message.user.toString() !== req.user._id && req.user.role !== "Admin")
     //   return res.status(403).send({ msg: "unauthentification" });
-    message = await Message.findByIdAndDelete(req.params.id);
-    res.send("message removed");
+   else{message = await Message.findByIdAndDelete(req.params.id);
+    res.send("message removed");} 
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../authentication/authentication.service';
@@ -10,28 +11,44 @@ import {RegisterDetails} from '../authentication/model/credentials';
   styleUrls: ['./registration-component.component.scss']
 })
 export class RegistrationComponentComponent implements OnInit {
-
+ 
   constructor(private router: Router, private authService: AuthenticationService) { }
+  // email: string;
+  // name: string;
+  // password: string;
+  // role: string;
+  // phone:number
+  name='';
 
-  username: string;
-  password: string;
-  password2: string;
-  email: string;
-  types = [{value: 'user', viewValue:'User'}, {value: 'admin', viewValue: 'Admin'}, {value: 'invalid', viewValue: 'Invalid'}];
-  type: string = 'user';
+  email='';
+  password='';
+  phone=0;
+ 
+  types = [{value: 'Client', viewValue:'Client'}, {value: 'Admin', viewValue: 'Admin'}];
+  // , {value: 'invalid', viewValue: 'Invalid'}
+  role= '';
   imgURL;
   error = {};
+
   //Type is hard coded as user - otherwise registration doesn't work
 
   ngOnInit() {
+    console.log(this.name,this.email,this.phone,this.role,this.password)
   }
+  OnSubmit(form:NgForm){
+    console.log(form.value);
+    }
+  register() {
+  
 
-  register(): void {
-    this.authService.register(new RegisterDetails(this.email, this.username, this.password, this.password2, this.type))
+    this.authService.register(new RegisterDetails( this.name, this.email,this.password, this.role,this.phone))
+    
      .catch(err => {
        this.error = err.error;
+       console.log(this.error)
      });
-    //Type is hard coded as user - otherwise registration doesn't work
+     
+     console.log(RegisterDetails)    //Type is hard coded as user - otherwise registration doesn't work
   }
 
   imageSelected(selectedURL){

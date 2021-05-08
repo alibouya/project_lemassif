@@ -16,3 +16,4 @@
 </mat-card>
 <app-post-item-component *ngFor="let post of posts" [post]="post" (deletedPost)="deletePost($event)">
 </app-post-item-component>
+<button mat-raised-button (click)="Logout()" color="primary">Logout</button>
