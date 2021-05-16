@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
 router.get("/recent", async (req, res) => {
   try {
     const publications = await Publication.find()
-      // .limit(7)
+       .limit(8)
       .sort({ date: -1 });
 
     if (!publications)
@@ -210,6 +210,13 @@ router.delete("/:id",  async (req, res) => {
 // @route    POST annonces/comment/:id/:comment_id
 // @desc     add a comment
 // @access   Private
+/*authentification,
+
+[
+  check("text", "Text is required")
+    .not()
+    .isEmpty()
+]*/
 router.post(
   "/comment/:id",
   [

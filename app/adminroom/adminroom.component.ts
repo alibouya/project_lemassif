@@ -70,7 +70,7 @@ export class AdminroomComponent implements OnInit {
 }
   currentuser(){
     this.authService.saveuser("lemassif_showroom@gmail.com","ourmassifroom0000").subscribe(loggedinfo=>{
-      return  this.useradmin=loggedinfo;
+      return  loggedinfo;
         console.log('user2=',this.useradmin);
       },error=>console.log(error))
   }

@@ -25,7 +25,7 @@ export class RegisterDetails implements UserDetails {
 }
 
 export class Credentials {
-  constructor(public email: string, private password: string) {}
+  constructor(public email: string, public password: string) {}
 
   get basicAuth(): string {
     return 'Basic ' + btoa(this.email + ':' + this.password);

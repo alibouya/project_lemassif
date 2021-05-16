@@ -1,34 +1,35 @@
-<!-- <p>User Profile</p>
-<div *ngIf="isOwnPage">This is your own profile</div>
-<div>User: {{userViewing?.email}}</div>
-<button *ngIf="isOwnPage || user.type == 'admin'">Delete</button> -->
 <h1 class="text-center">Hi user you are logged in your profile</h1>
 <button mat-raised-button (click)="recentpublication()" color="primary">Voir les derniers publication</button>
-<button mat-raised-button (click)="savemess()" color="primary">Demander un devis</button>
+<button mat-raised-button (click)="savemess()" color="primary" data-toggle="modal" data-target="#exampleModal">Demander
+  un devis</button>
 
 
 <button mat-raised-button class="btn btn-warning float-right" (click)="Logout()" color="primary">Logout</button>
 
-<hr>
-<!-- <button mat-raised-button (click)="currentuser()" color="primary">Liste des utiisateurs</button><hr> -->
+<!-- <hr>
 
-<div class="container"></div>
 <h3 class="text-center" *ngIf="loadedPubs.length < 1 && !isPosting  ">Dernières publications</h3>
-<div class="row">
-  <div class="col-xs-12 col-md-6 col-md-offset-3">
-    <p *ngIf="loadedPubs.length < 1 && !isPosting  "></p>
-    <ul class="list-group" *ngIf="loadedPubs.length >= 1 && !isPosting">
-      <li class="list-group-item" *ngFor="let pubs of loadedPubs">
-        <div class="container">
+<div>
+  <p *ngIf="loadedPubs.length < 1 && !isPosting  "></p>
+  <ul class="list-group" *ngIf="loadedPubs.length >= 1 && !isPosting">
+    <li class="list-group-item" *ngFor="let pubs of loadedPubs">
 
-          <p class="text-center">Catégories :{{ pubs.marque }}</p>
+        <div class="card-block">
 
-          <img src="{{ pubs.image }}" class="d-block w-100" height="300px" alt="...">
-          <p class="text-center">Description : {{ pubs.description }}</p>
-          <p>Titre : {{ pubs.title }}</p>
-          <p>publié le :{{ pubs.date }}</p>
+          <p class="card-title">Catégories :{{ pubs.marque }}</p>
+
+          <img src="{{ pubs.image }}" class="card-img-top" height="300px" alt="Card image cap">
+          <p class="card-text">Description : {{ pubs.description }}</p>
+          <p class="card-text">Titre : {{ pubs.title }}</p>
+          <p class="card-text">publié le :{{ pubs.date }}</p>
           <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+          <button mat-raised-button (click)=" writecomment(pubs._id)" color="primary">Ecrire un commentaire</button>
 
+          <div *ngIf="comment ">
+            <label for="message-text" class="col-form-label">Votre commentaire:</label>
+            <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+            <button mat-raised-button (click)="sendcomment(textarea,comm._id)">Send comment</button>
+          </div>
           <ul class="list-group" *ngIf="!isComment">
             <li class="list-group-item" *ngFor="let comm of pubs.Comments">
               <div class="container">
@@ -39,54 +40,513 @@
             </li>
           </ul>
         </div>
+      </div> 
 
-        <hr>
+      <hr>
 
-      </li>
-    </ul>
-    <div class="form-group form-group-lg">
-    <mat-card class="my-card" *ngIf="devis">
-      <mat-card-content>
-        <span>
-          <p> Demander un devis</p>
-        </span>
-  
-        <form class="my-form" #deviform="ngForm" >
-          <mat-form-field class="full-width">
-            <mat-label>Name</mat-label>
-            <input matInput type="name" id="name" required placeholder="name" class="form-control" ngModel
-              [(ngModel)]="name" name="name">
-          </mat-form-field>
-          <hr>
-  
-          <mat-form-field class="full-width">
-            <mat-label>Phone</mat-label>
-            <input matInput class="form-control" type="phone" id="phone" required placeholder="phone"
-              ngModel [(ngModel)]="phone" name="phone">
-  
-          </mat-form-field>
-          <hr>
-  
-          <mat-form-field class="full-width">
-            <mat-label>Text</mat-label>
-            <input matInput class="form-control" type="text" id="text" required placeholder="text"
-              ngModel [(ngModel)]="text" name="text">
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>  
-          </mat-form-field>
-          <hr>
-  
-  
-          
-          <button (click)="writemessage(deviform)" class="btn btn-primary">Envoyer un message</button>
-  
-        </form>
-  
-  
-      </mat-card-content>
-    </mat-card>
+    </li>
+  </ul> -->
+<!-- /*****************************************************************/ -->
+<div class="container">
+  <div class="card-deck ">
+    <div class="row">
+      <div class="card">
+        <div class="card-block">
+          <p class="card-title">Catégories :{{ loadedPubs[0].marque }}</p>
+
+          <img src="{{ loadedPubs[0].image }}" class="card-img-top" height="300px" alt="Card image cap">
+          <p class="card-text">Description : {{ loadedPubs[0].description }}</p>
+          <p class="card-text">Titre : {{loadedPubs[0].title }}</p>
+          <p class="card-text">publié le :{{ loadedPubs[0].date }}</p>
+
+          <button class="btn btn-danger" (click)="likes(loadedPubs[0]._id)">
+            <i class="fas fa-thumbs-up"></i> Like
+          </button>
+          <button class="btn btn-danger" (click)="unlikes(loadedPubs[0]._id)">
+            <i class="fas fa-thumbs-down" ></i> UnLike
+          </button>
+          <div class="card-footer">
+           
+            <div class="card-footer ">
+              <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+              <button mat-raised-button (click)=" writecomment(loadedPubs[0]._id)" color="primary">Ecrire un
+                commentaire</button>
+              <div *ngIf="comment ">
+                <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[0]._id)" color="primary">Send
+                  comment</button>
+              </div>
+              <ul class="list-group" *ngIf="!isComment">
+                <li class="list-group-item" *ngFor="let comm of loadedPubs[0].Comments">
+
+                  <div class="container border bg-light">
+                    <h3>{{ comm.text }}
+                      <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[0]._id,comm._id)"
+                        type="button" display="inline-block" color="red" width="16" height="16" fill="currentColor"
+                        class="bi bi-trash" viewBox="0 0 16 16">
+                        <path
+                          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                        <path fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                      </svg>
+                    </h3>
+
+                    <h3>Posted at: {{ comm.date }}</h3>
+
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- /***********************************************************************/ -->
+
+        <div class="card">
+          <div class="card-block">
+            <p class="card-title">Catégories :{{ loadedPubs[1].marque }}</p>
+
+            <img src="{{ loadedPubs[1].image }}" class="card-img-top" height="300px" alt="Card image cap">
+            <p class="card-text">Description : {{ loadedPubs[1].description }}</p>
+            <p class="card-text">Titre : {{loadedPubs[1].title }}</p>
+            <p class="card-text">publié le :{{ loadedPubs[1].date }}</p>
+            <button class="btn btn-danger" (click)="likes(loadedPubs[1]._id)">
+              <i class="fas fa-thumbs-up"></i> Like
+            </button>
+            <button class="btn btn-danger" (click)="unlikes(loadedPubs[1]._id)">
+              <i class="fas fa-thumbs-down" ></i> UnLike
+            </button>
+            <div class="card-footer">
+              
+              <div class="card-footer">
+                <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+                <button mat-raised-button (click)=" writecomment(loadedPubs[1]._id)" color="primary">Ecrire un
+                  commentaire</button>
+                <div *ngIf="comment ">
+                  <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                  <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                  <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[1]._id)" color="primary">Send
+                    comment</button>
+                </div>
+                <ul class="list-group" *ngIf="!isComment">
+                  <li class="list-group-item" *ngFor="let comm of loadedPubs[1].Comments">
+
+                    <div class="container border bg-light">
+                      <h3>{{ comm.text }}
+                        <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[1]._id,comm._id)"
+                          type="button" display="inline-block" color="red" width="16" height="16" fill="currentColor"
+                          class="bi bi-trash" viewBox="0 0 16 16">
+                          <path
+                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                          <path fill-rule="evenodd"
+                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                        </svg>
+                      </h3>
+                      <h3>Posted at: {{ comm.date }}</h3>
+
+                    </div>
+                  </li>
+
+
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /*****************************************************************/ -->
+      <div class="container">
+        <div class="row">
+          <div class="card">
+            <div class="card-block">
+              <p class="card-title">Catégories :{{ loadedPubs[2].marque }}</p>
+
+              <img src="{{ loadedPubs[2].image }}" class="card-img-top" height="300px" alt="Card image cap">
+              <p class="card-text">Description : {{ loadedPubs[2].description }}</p>
+              <p class="card-text">Titre : {{loadedPubs[2].title }}</p>
+              <p class="card-text">publié le :{{ loadedPubs[2].date }}</p>
+              <button class="btn btn-danger" (click)="likes(loadedPubs[2]._id)">
+                <i class="fas fa-thumbs-up"></i> Like
+              </button>
+              <button class="btn btn-danger" (click)="unlikes(loadedPubs[2]._id)">
+                <i class="fas fa-thumbs-down"></i> UnLike
+              </button>
+              <div class="card-footer">
+               
+                <div class="card-footer">
+                  <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+                  <button mat-raised-button (click)=" writecomment(loadedPubs[2]._id)" color="primary">Ecrire un
+                    commentaire</button>
+                  <div *ngIf="comment ">
+                    <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                    <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                    <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[2]._id)" color="primary">Send
+                      comment</button>
+                  </div>
+                  <ul class="list-group" *ngIf="!isComment">
+                    <li class="list-group-item" *ngFor="let comm of loadedPubs[2].Comments">
+
+                      <div class="container border bg-light">
+                        <h3>{{ comm.text }}
+                          <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[2]._id,comm._id)"
+                            type="button" display="inline-block" color="red" width="16" height="16" fill="currentColor"
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                            <path fill-rule="evenodd"
+                              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                          </svg>
+                        </h3>
+                        <h3>Posted at: {{ comm.date }}</h3>
+
+                      </div>
+                    </li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- /***********************************************************/ -->
+
+
+
+            <!-- /***********************************************************/ -->
+            <div class="card  border bg-light">
+              <div class="card-block">
+                <p class="card-title">Catégories :{{ loadedPubs[3].marque }}</p>
+
+                <img src="{{ loadedPubs[3].image }}" class="card-img-top" height="300px" alt="Card image cap">
+                <p class="card-text">Description : {{ loadedPubs[3].description }}</p>
+                <p class="card-text">Titre : {{loadedPubs[3].title }}</p>
+                <p class="card-text">publié le :{{ loadedPubs[3].date }}</p>
+                <button class="btn btn-danger" (click)="likes(loadedPubs[3]._id)">
+                  <i class="fas fa-thumbs-up"></i> Like
+                </button>
+                <button class="btn btn-danger" (click)="unlikes(loadedPubs[3]._id)">
+                  <i class="fas fa-thumbs-down"></i> UnLike
+                </button>
+                <div class="card-footer">
+                  
+                  <div class="card-footer">
+                    <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+                    <button mat-raised-button (click)=" writecomment(loadedPubs[3]._id)" color="primary">Ecrire un
+                      commentaire</button>
+                    <div *ngIf="comment ">
+                      <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                      <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                      <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[3]._id)" color="primary">Send
+                        comment</button>
+                    </div>
+                    <ul class="list-group" *ngIf="!isComment">
+
+                      <li class="list-group-item" *ngFor="let comm of loadedPubs[3].Comments">
+
+                        <div class="container border bg-light">
+                          <h3>{{ comm.text }}
+
+                            <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[3]._id,comm._id)"
+                              type="button" display="inline-block" color="red" width="16" height="16"
+                              fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                              <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                              <path fill-rule="evenodd"
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            </svg>
+                          </h3>
+                          <h3>Posted at: {{ comm.date }}</h3>
+
+                        </div>
+                      </li>
+
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="container">
+                <div class="row">
+                  <div class="card">
+                    <div class="card-block">
+                      <p class="card-title">Catégories :{{ loadedPubs[2].marque }}</p>
+        
+                      <img src="{{ loadedPubs[4].image }}" class="card-img-top" height="300px" alt="Card image cap">
+                      <p class="card-text">Description : {{ loadedPubs[4].description }}</p>
+                      <p class="card-text">Titre : {{loadedPubs[4].title }}</p>
+                      <p class="card-text">publié le :{{ loadedPubs[4].date }}</p>
+                      <button class="btn btn-danger" (click)="likes(loadedPubs[4]._id)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                      </button>
+                      <button class="btn btn-danger" (click)="unlikes(loadedPubs[4]._id)">
+                        <i class="fas fa-thumbs-down"></i> UnLike
+                      </button>
+                      <div class="card-footer">
+                       
+                        <div class="card-footer">
+                          <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+                          <button mat-raised-button (click)=" writecomment(loadedPubs[4]._id)" color="primary">Ecrire un
+                            commentaire</button>
+                          <div *ngIf="comment ">
+                            <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                            <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                            <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[2]._id)" color="primary">Send
+                              comment</button>
+                          </div>
+                          <ul class="list-group" *ngIf="!isComment">
+                            <li class="list-group-item" *ngFor="let comm of loadedPubs[4].Comments">
+        
+                              <div class="container border bg-light">
+                                <h3>{{ comm.text }}
+                                  <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[4]._id,comm._id)"
+                                    type="button" display="inline-block" color="red" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path
+                                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                    <path fill-rule="evenodd"
+                                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                  </svg>
+                                </h3>
+                                <h3>Posted at: {{ comm.date }}</h3>
+        
+                              </div>
+                            </li>
+        
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+        
+                    <!-- /***********************************************************/ -->
+        
+        
+        
+                    <!-- /***********************************************************/ -->
+                    <div class="card  border bg-light">
+                      <div class="card-block">
+                        <p class="card-title">Catégories :{{ loadedPubs[5].marque }}</p>
+        
+                        <img src="{{ loadedPubs[5].image }}" class="card-img-top" height="300px" alt="Card image cap">
+                        <p class="card-text">Description : {{ loadedPubs[5].description }}</p>
+                        <p class="card-text">Titre : {{loadedPubs[5].title }}</p>
+                        <p class="card-text">publié le :{{ loadedPubs[5].date }}</p>
+                        <button class="btn btn-danger" (click)="likes(loadedPubs[5]._id)">
+                          <i class="fas fa-thumbs-up"></i> Like
+                        </button>  {{loadedPubs[5].likes.length}}
+                        <button class="btn btn-danger" (click)="unlikes(loadedPubs[5]._id)">
+                          <i class="fas fa-thumbs-down"></i> UnLike
+                        </button>
+                        <div class="card-footer">
+                          
+                          <div class="card-footer">
+                            <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+                            <button mat-raised-button (click)=" writecomment(loadedPubs[5]._id)" color="primary">Ecrire un
+                              commentaire</button>
+                            <div *ngIf="comment ">
+                              <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                              <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                              <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[5]._id)" color="primary">Send
+                                comment</button>
+                            </div>
+                            <ul class="list-group" *ngIf="!isComment">
+        
+                              <li class="list-group-item" *ngFor="let comm of loadedPubs[5].Comments; trackBy: trackByFn">
+        
+                                <div class="container border bg-light">
+                                  <h3>{{ comm.text }}
+        
+                                    <svg xmlns="http://www.w3.org/2000/svg" (click)="deletecomment(loadedPubs[5]._id,comm._id)"
+                                      type="button" display="inline-block" color="red" width="16" height="16"
+                                      fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                      <path
+                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                      <path fill-rule="evenodd"
+                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                    </svg>
+                                  </h3>
+                                  <h3>Posted at: {{ comm.date }}</h3>
+        
+                                </div>
+                              </li>
+        
+                            </ul>
+                          </div>
+        
+                        </div>
+                      </div>
+              <!-- <div class="card">
+        <div class="card-block">
+          <p class="card-title">Catégories :{{ loadedPubs[4].marque }}</p>
+
+          <img src="{{ loadedPubs[4].image }}" class="card-img-top" height="300px" alt="Card image cap">
+          <p class="card-text">Description : {{ loadedPubs[4].description }}</p>
+          <p class="card-text">Titre : {{loadedPubs[4].title }}</p>
+          <p class="card-text">publié le :{{ loadedPubs[4].date }}</p>
+
+
+
+          <div class="card-footer">
+            <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+            <button mat-raised-button (click)=" writecomment(loadedPubs[4]._id)" color="primary">Ecrire un
+              commentaire</button>
+            <div *ngIf="comment ">
+              <label for="message-text" class="col-form-label">Votre commentaire:</label>
+              <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+              <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[4]._id)">Send
+                comment</button>
+            </div>
+            <ul class="list-group" *ngIf="!isComment">
+
+              <li class="list-group-item" *ngFor="let comm of loadedPubs[4].Comments">
+
+                <div class="container">
+                  <h3>{{ comm.text}}</h3>
+                  <h3>Posted at: {{ comm.date}}</h3>
+
+                </div>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <div class="card-block">
+            <p class="card-title">Catégories :{{ loadedPubs[5].marque }}</p>
+
+            <img src="{{ loadedPubs[5].image }}" class="card-img-top" height="250px" alt="Card image cap">
+            <p class="card-text">Description : {{ loadedPubs[5].description }}</p>
+            <p class="card-text">Titre : {{loadedPubs[5].title }}</p>
+            <p class="card-text">publié le :{{ loadedPubs[5].date }}</p>
+
+
+
+            <div class="card-footer">
+              <button mat-raised-button (click)=" currentcomment()" color="primary">Recent Comments</button>
+              <button mat-raised-button (click)=" writecomment(loadedPubs[5]._id)" color="primary">Ecrire un
+                commentaire</button>
+              <div *ngIf="comment ">
+                <label for="message-text" class="col-form-label">Votre commentaire:</label>
+                <textarea class="form-control" id="message-text" [(ngModel)]='textarea'></textarea>
+                <button mat-raised-button (click)="sendcomment(textarea,loadedPubs[5]._id)">Send
+                  comment</button>
+              </div>
+              <ul class="list-group" *ngIf="!isComment">
+
+                <li class="list-group-item" *ngFor="let comm of loadedPubs[5].Comments">
+
+                  <div class="container">
+                    <h3>{{ comm.text}}</h3>
+                    <h3>Posted at: {{ comm.date}}</h3>
+
+                  </div>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
+</div> -->
 
 
-  
- 
+
+              <!--**************************************************************************/
+     <div class="form-group ">
+      <mat-card class="my-card" *ngIf="devis">
+        <mat-card-content>
+          <span>
+            <p> Demander un devis</p>
+          </span>
+
+          <form class="my-form" #deviform="ngForm">
+            <mat-form-field class="full-width">
+              <mat-label>Name</mat-label>
+              <input matInput type="name" id="name" required placeholder="name" class="form-control" ngModel
+                [(ngModel)]="name" name="name">
+            </mat-form-field>
+            <hr>
+
+            <mat-form-field class="full-width">
+              <mat-label>Phone</mat-label>
+              <input matInput class="form-control" type="phone" id="phone" required placeholder="phone" ngModel
+                [(ngModel)]="phone" name="phone">
+
+            </mat-form-field>
+            <hr>
+
+            <mat-form-field class="full-width">
+              <mat-label>Text</mat-label>
+              <input matInput class="form-control" type="text" id="text" required placeholder="text" ngModel
+                [(ngModel)]="text" name="text">
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </mat-form-field>
+            <hr>
+
+
+
+            <button (click)="writemessage(deviform)" class="btn btn-primary">Envoyer un message</button>
+
+          </form>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div> -->
+
+
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="text-center" id="exampleModalLabel">Demande de devis</h3>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form class="my-form" #deviform="ngForm">
+                        <mat-form-field class="full-width">
+                          <mat-label>Name</mat-label>
+                          <input matInput type="name" id="name" required placeholder="name" class="form-control" ngModel
+                            [(ngModel)]="name" name="name">
+                        </mat-form-field>
+                        <hr>
+
+                        <mat-form-field class="full-width">
+                          <mat-label>Phone</mat-label>
+                          <input matInput class="form-control" type="phone" id="phone" required placeholder="phone"
+                            ngModel [(ngModel)]="phone" name="phone">
+
+                        </mat-form-field>
+                        <hr>
+
+                        <mat-form-field class="full-width">
+                          <mat-label>Text</mat-label>
+                          <input matInput class="form-control" type="text" id="text" required placeholder="text" ngModel
+                            [(ngModel)]="text" name="text">
+                          <textarea class="form-control" id="message-text"></textarea>
+                        </mat-form-field>
+
+
+
+
+
+                      </form>
+
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                      <button (click)="writemessage(deviform)" class="btn btn-primary">Envoyer un message</button>
+                    </div>
+                  </div>
+                </div>
+              </div>

@@ -28,16 +28,18 @@ export class AuthenticationService {
 
   isPosting = false;
   loadedPubs: pubs[] = [];
+  private user3: UserDetails 
 
 
   public userSubject: BehaviorSubject<UserDetails> = new BehaviorSubject<UserDetails>(null);
   private tokenDetails: TokenDetails;
+  SESSION_STORAGE_TOKEN_KEY: string;
 
   constructor(private router: Router, private http: HttpClient) { }
    public saveToken(token:string): void{
      window.sessionStorage.removeItem(this.LOCAL_STORAGE_TOKEN_KEY);
      window.sessionStorage.setItem(this.LOCAL_STORAGE_TOKEN_KEY,token)
-
+    console.log(token)
    }
   //  saveToken(tokenDetails: TokenDetails) {
   //   localStorage.setItem(this.LOCAL_STORAGE_TOKEN_KEY, tokenDetails.token);
@@ -55,8 +57,9 @@ export class AuthenticationService {
       return localStorage.getItem(this.LOCAL_STORAGE_TOKEN_KEY);
       console.log(localStorage.getItem(this.LOCAL_STORAGE_TOKEN_KEY))
     }
-    return this.tokenDetails;
     console.log(this.tokenDetails)
+    return this.tokenDetails;
+    
   }
 
   getBasicAuth(): string {
@@ -79,26 +82,26 @@ export class AuthenticationService {
   
   login(credentials: Credentials){
     // Creates its own header to supply basic auth with username/password instead of token
-    const headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-    });
-    return this.http.post<TokenDetails>(this.ROOT_URL + '/login',credentials).toPromise().then(tokenDetails => {
+    const headers=new HttpHeaders().set("x-auth-token","tokenDetails" )
+
+    return this.http.post<TokenDetails>(this.ROOT_URL + '/login',{email:credentials.email,password:credentials.password}).toPromise().then(tokenDetails => {
       this.saveToken(tokenDetails.token);
-      console.log("tokenDetails",tokenDetails.token)      
+      console.log("tokenDetails",tokenDetails.token)  
+      this.loggedInUser(tokenDetails.token);
      
 
 
      // this.router.navigate(['chambres']);
-
-      return  this.loggedInUser(tokenDetails);
+console.log(this.loggedInUser(tokenDetails.token))
+      return  this.loggedInUser(tokenDetails.token);
     });
   }
-  saveuser(email:String,password:String) {
+  saveuser(email, password) {
     // Creates its own header to supply basic auth with username/password instead of token
     const headers = new HttpHeaders({
       'Content-Type':  'application/json',
     });
-    return this.http.post<user>(this.ROOT_URL + '/login',{email:email,password:password})
+    return this.http.post<TokenDetails>(this.ROOT_URL + '/login',{email:email,password:password})
   }
 
 
@@ -114,10 +117,11 @@ export class AuthenticationService {
   }
 
   loggedInUser(tokenDetails): Promise<user> {
-    return this.http.get<user>(this.ROOT1,).toPromise().then(userDetails => {
+    const headers=new HttpHeaders().set('x-auth-token',tokenDetails)
+    return this.http.get<user>(this.ROOT1, {headers}).toPromise().then(userDetails => {
       this.userSubject.next(userDetails);
-      console.log(this.userSubject)
-
+      console.log('l\'utilisateur est:',userDetails)
+      this.user3=userDetails
       return userDetails;
     }).catch(err => {
       this.removeToken();
@@ -125,18 +129,7 @@ export class AuthenticationService {
       return null;
     });
   }
-  // loggedInUser(tokenDetails): Promise<UserDetails> {
-  //   return this.http.get<UserDetails>(this.ROOT_URL+"/current" ).toPromise().then(userDetails => {
-  //     this.userSubject.next(userDetails);
-  //     console.log(this.userSubject)
-
-  //     return userDetails;
-  //   }).catch(err => {
-  //     this.removeToken();
-  //     this.userSubject.next(null);
-  //     return null;
-  //   });
-  // }
+ 
 
   getUserSubject(): BehaviorSubject<UserDetails> {
     console.log(this.userSubject)
@@ -160,12 +153,11 @@ export class AuthenticationService {
 
   }
 
-  searchUser(Credentials){
+  searchUser(userDetails){
     
-
+    const headers=new HttpHeaders({'x-auth-token':userDetails })
     return this.http
-        .post<user>("http://localhost:5000/authentification/login",Credentials)
-        
+        .get<user>("http://localhost:5000/authentification/current",{headers:headers}) 
   
           }
         
@@ -200,5 +192,17 @@ export class AuthenticationService {
      } ,(errors)=>{console.log(errors);return errors})
     //  return this.datas
     //return this.datas.
+  }
+  write_comment(textarea,pub){
+    console.log(pub)
+    console.log(this.getToken()[1])
+    const headers=new HttpHeaders().set('x-auth-token',this.getBasicAuth())
+  return  this.http.post(`http://localhost:5000//publications/comment/${pub}`,{text:textarea})
+  }
+  deletecom(loadedPubs,loadedPubs1){
+    const headers1=new HttpHeaders().set('x-auth-token',sessionStorage.getItem(this.SESSION_STORAGE_TOKEN_KEY))
+    console.log(sessionStorage.getItem(this.SESSION_STORAGE_TOKEN_KEY))
+    return this.http.delete("http://localhost:5000/publications/comment/"+loadedPubs,)
+
   }
 }
